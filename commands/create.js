@@ -18,7 +18,7 @@ async function close({guildId, voteId, channelId, messageId}) {
     // embed
     const embed = await this.db.get(`${this.user.username}:${guildId}:vote:${voteId}:embed`)
     // loops
-    let loop = await this.db.get(`${this.user.username}:loop`)
+    let loop = await this.db.get(`${this.user.username}:loop`) || []
     loop = loop.filter(o => o.messageId !== messageId)
     if(loop.length <= 0) {
       await this.db.clear(`${this.user.username}:loop`)
