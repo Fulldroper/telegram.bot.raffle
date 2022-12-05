@@ -212,11 +212,11 @@ module.exports.component = async function (interaction) {
             "components": [{
               "type": 4,
               "custom_id": "time",
-              "label": "Час на відповідь в ms (Не обов'язково)",
+              "label": "Секунд на відповідь (Не обов'язково)",
               "style": 1,
               "min_length": 1,
               "max_length": 10,
-              "placeholder": `${EX}`,
+              "placeholder": `${EX/1000}`,
               "required": false
             }]
           }, {
@@ -388,6 +388,7 @@ module.exports.modal = async function (interaction) {
       const embeds = await this.db.get(`${this.user.username}:${interaction.guildId}:vote:${interaction.meta[2]}:embed`)
       // publish
       embeds[0].footer.text = `Обмеження ${(!time && !users ) ? "вимкнуто" : ":"}`
+      console.log(time.msToDate());
       if (time) embeds[0].footer.text += ` ${time} ms`;
       if (users) embeds[0].footer.text += ` ${users} користувачів`;
       const components = []
