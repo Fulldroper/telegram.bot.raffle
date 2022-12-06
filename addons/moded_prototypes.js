@@ -72,12 +72,14 @@ module.exports = () => {
    * // 5 користувачів
    * @return {string} a string from a number and the desired declension
    */
-   Number.prototype.declension = function({count, one = 'користувач', few = 'користувача', many ='користувачів'}) {
-    console.log(this)
-    if(!count) count = this
+   Number.prototype.declension = function(options = {}) {
+    const {
+      one = 'користувач',
+      few = 'користувача',
+      many = 'користувачів',
+      count = this
+    } = options
     if (Number.isNaN(count)) return false;
-    // get last digit
-    const n = String(count).slice(-1)
     // reserve declaration
     const declensionNumbers = {
       '1': one,
@@ -92,6 +94,6 @@ module.exports = () => {
       '0': many
     }
     // check declension and return
-    return `${count} ${declensionNumbers[n]}`    
+    return `${count} ${declensionNumbers[String(count).slice(-1)]}`    
   }
 }
