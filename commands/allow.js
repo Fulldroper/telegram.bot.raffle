@@ -33,7 +33,7 @@ module.exports.run = async function(interaction) {
 
   if (interaction.member.permissions.serialize().Administrator || allowed.includes(interaction.member.id)) {
     const users = await this.db.get(id2)
-    if (users.find(u => u === user)) {
+    if (users.includes(user)) {
       interaction.reply({ content: `Користувачу <@${user}> вже дозволено виконувати команду \`${command}\``, ephemeral: true }).catch(e => console.error(e));
     } else {
       await this.db.push(id2, user)
