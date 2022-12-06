@@ -400,9 +400,9 @@ module.exports.modal = async function (interaction) {
         for (const key in date) {
           if(!date[key]) break
           switch (key) {
-            case 'y':timeString += date[key].declension({one: 'рік', few: 'роки', many: 'років'}) ;break;
-            case 'd':timeString += date[key].declension({one: 'день', few: 'дня', many: 'днів'}) ;break;
-            case 'h':timeString += date[key].declension({one: 'година', few: 'години', many: 'годин'}) ;break;
+            case 'y':timeString += date[key].declension({one: 'рік',     few: 'роки',    many: 'років' }) ;break;
+            case 'd':timeString += date[key].declension({one: 'день',    few: 'дня',     many: 'днів'  }) ;break;
+            case 'h':timeString += date[key].declension({one: 'година',  few: 'години',  many: 'годин' }) ;break;
             case 'm':timeString += date[key].declension({one: 'хвилина', few: 'хвилини', many: 'хвилин'}) ;break;
             case 's':timeString += date[key].declension({one: 'секунда', few: 'секунди', many: 'секунд'}) ;break;
           }
