@@ -29,7 +29,7 @@ module.exports.run = async function(interaction) {
     const users = await this.db.get(id2) || []
     let content = `Користувачі які мають дозвіл до команди ${command}\n`
     if (users.length > 0) {
-      user.forEach(u => {
+      users.forEach(u => {
         content += `<@${u}> `
       });
     } else {
