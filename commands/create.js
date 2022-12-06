@@ -65,7 +65,7 @@ async function close({guildId, voteId, channelId, messageId}) {
     if (users) {
       users.forEach(e => usrs+= e.length)
     }
-    embed[0].footer.text = `В опитуванні взяв ${usrs.declension({one: 'учасник', few: 'учасника', many:'учасників'})}`
+    embed[0].footer.text = `*${usrs.declension({one: 'учасник', few: 'учасника', many:'учасників'})}`
     
     msg.edit({
       embeds: [
@@ -394,10 +394,22 @@ module.exports.modal = async function (interaction) {
       embeds[0].footer.text = `Обмеження ${(!time && !users ) ? "вимкнуто" : ":"}`
       if (time) { 
         time *= 1000
-        console.log(time.msToDate());
-        embeds[0].footer.text += ` ${time} ms`
+        let timeString = `` 
+        const date = time.msToDate()
+
+        for (const key in date) {
+          if(!date[key]) return
+          switch (key) {
+            case 'y':timeString += date[key].declension({one: 'рік', few: 'роки', many: 'років'}) ;break;
+            case 'd':timeString += date[key].declension({one: 'день', few: 'дня', many: 'днів'}) ;break;
+            case 'h':timeString += date[key].declension({one: 'година', few: 'години', many: 'годин'}) ;break;
+            case 'm':timeString += date[key].declension({one: 'хвилина', few: 'хвилини', many: 'хвилин'}) ;break;
+            case 's':timeString += date[key].declension({one: 'секунда', few: 'секунди', many: 'секунд'}) ;break;
+          }
+        }
+        embeds[0].footer.text += timeString
       };
-      if (users) embeds[0].footer.text += ` ${users} користувачів`;
+      if (users) embeds[0].footer.text += users.declension();
       const components = []
 
       const l = params.length / 5
