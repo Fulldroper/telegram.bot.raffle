@@ -28,7 +28,6 @@ module.exports.run = async function(interaction) {
   if (interaction.member.permissions.serialize().Administrator || allowed.includes(interaction.member.id)) {
     const users = await this.db.get(id2) || []
     let content = `Користувачі які мають дозвіл до команди ${command}\n`
-    console.log(command, user, users)
     if (users.length > 0) {
       user.forEach(u => {
         content += `<@${u}> `
