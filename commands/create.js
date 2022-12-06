@@ -398,7 +398,7 @@ module.exports.modal = async function (interaction) {
         const date = time.msToDate()
 
         for (const key in date) {
-          if(!date[key]) return
+          if(!date[key]) break
           switch (key) {
             case 'y':timeString += date[key].declension({one: 'рік', few: 'роки', many: 'років'}) ;break;
             case 'd':timeString += date[key].declension({one: 'день', few: 'дня', many: 'днів'}) ;break;
