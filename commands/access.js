@@ -26,9 +26,16 @@ module.exports.run = async function(interaction) {
   const id2 = `${this.user.username}:${interaction.guildId}:allow:${command}`
 
   if (interaction.member.permissions.serialize().Administrator || allowed.includes(interaction.member.id)) {
-    const users = await this.db.get(id2)
+    const users = await this.db.get(id2) || []
+    let content = `Користувачі які мають дозвіл до команди ${command}\n`
     console.log(command, user, users)
-    
-    // interaction.reply({ content: `Користувачу <@${user}> дозволено виконувати команду \`${command}\``, ephemeral: true }).catch(e => console.error(e));
+    if (users.length > 0) {
+      user.forEach(u => {
+        content += `<@${u}> `
+      });
+    } else {
+      content += ' - Немає користувачів'
+    }
+    interaction.reply({ content, ephemeral: true }).catch(e => console.error(e));
   } else interaction.reply({ content: '❌ У вас недостатньо прав для виконання команди', ephemeral: true }).catch(e => console.error(e));
 }
