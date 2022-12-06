@@ -11,6 +11,7 @@ module.exports.info = {
       {"name": "create", "value": "create"},
       {"name": "reset", "value": "reset"},
       {"name": "access", "value": "access"},
+      {"name": "channel", "value": "channel"},
       {"name": "allow", "value": "allow"}
     ],
     "channel_types": 0,
