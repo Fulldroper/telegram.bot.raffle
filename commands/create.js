@@ -409,7 +409,7 @@ module.exports.modal = async function (interaction) {
         }
         embeds[0].footer.text += timeString
       };
-      if (users) embeds[0].footer.text += users.declension();
+      if (users) embeds[0].footer.text += users.declension({one:users});
       const components = []
 
       const l = params.length / 5

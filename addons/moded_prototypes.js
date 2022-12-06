@@ -73,7 +73,6 @@ module.exports = () => {
    * @return {string} a string from a number and the desired declension
    */
    Number.prototype.declension = function({count, one = 'користувач', few = 'користувача', many ='користувачів'}) {
-    console.log(this, count);
     if(!count) count = this
     if (Number.isNaN(count)) return false;
     // get last digit
