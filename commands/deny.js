@@ -32,7 +32,7 @@ module.exports.run = async function(interaction) {
   const id2 = `${this.user.username}:${interaction.guildId}:allow:${command}`
 
   if (interaction.member.permissions.serialize().Administrator || allowed.includes(interaction.member.id)) {
-    const users = await this.db.get(id2)
+    const users = await this.db.get(id2) || []
     if (users.includes(user)) {
       await this.db.filter(id2, u => u !== user)
       interaction.reply({ content: `Користувачу <@${user}> не має дозволу виконувати команду \`${command}\``, ephemeral: true }).catch(e => console.error(e));
