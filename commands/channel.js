@@ -13,9 +13,11 @@ module.exports.info = {
 }
 
 module.exports.run = async function(interaction) {
-  if (interaction.member.permissions.serialize().Administrator) {
+  const id = `${this.user.username}:${interaction.guildId}:allow:${interaction.commandName || interaction.meta[0]}`
+  const allowed = await this.db.get(id) || []
+  if (interaction.member.permissions.serialize().Administrator || allowed.includes(interaction.member.id)) {
     const ref = interaction.options.get("channel")
       this.db.set(`${this.user.username}:${interaction.guildId}:settings`, {channel: ref.value})
       interaction.reply({ content: `✅ <#${ref.value}>, встановлено як канал для публікацій.`, ephemeral: true }).catch(e => console.error(e));
-  } else interaction.reply({ content: '❌ Ви маєте мати права адміністратора', ephemeral: true }).catch(e => console.error(e));
+  } else interaction.reply({ content: '❌ У вас недостатньо прав для виконання команди', ephemeral: true }).catch(e => console.error(e));
 }
