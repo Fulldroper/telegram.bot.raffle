@@ -120,14 +120,14 @@ module.exports.run = async function (interaction) {
         const embeds =  [
           {
             "type": "rich",
-            "title": `Опитування від ${user.username}#${user.discriminator}`,
+            // "title": `Опитування від ${user.username}#${user.discriminator}`,
             "color": user.id == process.env.AUTHOR_ID ? 0x5a3cbb : 0x313e3e,
             "description": `${value}`,
-            "thumbnail": {
-              "url": `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`,
-              "height": 0,
-              "width": 0
-            },
+            // "thumbnail": {
+            //   "url": `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`,
+            //   "height": 0,
+            //   "width": 0
+            // },
             "footer": {
               "text": `*вірна відповідь не обов'язкова`,
               "iconURL": `${interaction.guild.iconURL() || "https://cdn.discordapp.com/attachments/539138991031844864/986493279833055262/planning1.png"}`
