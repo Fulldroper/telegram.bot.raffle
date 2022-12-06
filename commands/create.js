@@ -65,7 +65,7 @@ async function close({guildId, voteId, channelId, messageId}) {
     if (users) {
       users.forEach(e => usrs+= e.length)
     }
-    embed[0].footer.text = `В опитуванні взяли участь ${usrs} користувачів`
+    embed[0].footer.text = `В опитуванні взяв ${usrs.declension({one: 'учасник', few: 'учасника', many:'учасників'})}`
     
     msg.edit({
       embeds: [
@@ -126,7 +126,7 @@ module.exports.run = async function (interaction) {
               "width": 0
             },
             "footer": {
-              "text": `*Вибрати правильну відповідь (не обов'язковий параметер)`,
+              "text": `*вірна відповідь не обов'язкова`,
               "iconURL": `${interaction.guild.iconURL() || "https://cdn.discordapp.com/attachments/539138991031844864/986493279833055262/planning1.png"}`
             }
           }
@@ -166,7 +166,7 @@ module.exports.run = async function (interaction) {
               "components": [
                 {
                   "type": 2,
-                  "label": "Вибрати правильну відповідь",
+                  "label": "Вибрати вірний варіант",
                   "emoji": "🏷️",
                   "style": 1,
                   "custom_id": `${interaction.commandName}:list:right`
@@ -372,14 +372,18 @@ module.exports.component = async function (interaction) {
 module.exports.modal = async function (interaction) {
   switch (interaction.meta[1]) {
     case "add":
-      const text = interaction.fields.getTextInputValue("text")
-      const variants = await this.db.get(`${this.user.username}:${interaction.guildId}:vote:${interaction.message.id}:variants`)
-      if (variants?.includes(text)) {
-        interaction.reply({content:`\`${text}\` - варіант відповіді вже існує`, ephemeral: true})
-        return
+      try {
+        const text = interaction.fields.getTextInputValue("text")
+        const variants = await this.db.get(`${this.user.username}:${interaction.guildId}:vote:${interaction.message.id}:variants`)
+        if (variants?.includes(text)) {
+          interaction.reply({content:`\`${text}\` - варіант відповіді вже існує`, ephemeral: true})
+          return
+        }
+        this.db.push(`${this.user.username}:${interaction.guildId}:vote:${interaction.message.id}:variants`, text)
+        interaction.reply({content:`\`${text}\` - добавлений як варіант відповіді`, ephemeral: true})
+      } catch (error) {
+        
       }
-      this.db.push(`${this.user.username}:${interaction.guildId}:vote:${interaction.message.id}:variants`, text)
-      interaction.reply({content:`\`${text}\` - добавлений як варіант відповіді`, ephemeral: true})
     break;
     case 'publish':
       let time = Number(interaction.fields.fields.get("time")?.value) || false
@@ -388,8 +392,11 @@ module.exports.modal = async function (interaction) {
       const embeds = await this.db.get(`${this.user.username}:${interaction.guildId}:vote:${interaction.meta[2]}:embed`)
       // publish
       embeds[0].footer.text = `Обмеження ${(!time && !users ) ? "вимкнуто" : ":"}`
-      console.log(time.msToDate());
-      if (time) embeds[0].footer.text += ` ${time} ms`;
+      if (time) { 
+        time *= 1000
+        console.log(time.msToDate());
+        embeds[0].footer.text += ` ${time} ms`
+      };
       if (users) embeds[0].footer.text += ` ${users} користувачів`;
       const components = []
 

@@ -34,7 +34,7 @@ module.exports.run = async function(interaction) {
 
   sortable.forEach((u, i) => {
     const emoji = [`:first_place:`,`:second_place:`,`:third_place:`]
-    description += `${emoji[i] ? `${emoji[i]} ` : ':star:'}<@${u[0]}> - ${u[1]} балів\n`
+    description += `${emoji[i] ? `${emoji[i]} ` : ':star:'}<@${u[0]}> - ${u[1].declension({one: 'бал', few: 'бала', many: 'балів'})}\n`
   });
 
   interaction.reply({
@@ -45,7 +45,7 @@ module.exports.run = async function(interaction) {
         "color": user.id == process.env.AUTHOR_ID ? 0x5a3cbb : 0x313e3e,
         description,
         "footer": {
-          "text": `*топ 10 користувачів із ${sortable.length}`,
+          "text": `*${sortable.length.declension()} відповідали на вірні питання`,
           "iconURL": `${interaction.guild.iconURL() || "https://cdn.discordapp.com/attachments/539138991031844864/986493279833055262/planning1.png"}`
         }
       }
