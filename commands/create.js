@@ -295,23 +295,23 @@ module.exports.component = async function (interaction) {
         interaction.reply({content: 'Вже максимальна кількість варіантів', ephemeral: true})
         return
       }
-      await interaction.showModal({
-        "title": "Варіант відповіді",
-        "custom_id": `${interaction.meta[0]}:${interaction.meta[1]}`,
-        "components": [{
-            "type": 1,
-            "components": [{
-              "type": 4,
-              "custom_id": "text",
-              "label": "Напишіть варіант відповіді",
-              "style": 2,
-              "min_length": 1,
-              "max_length": 80,
-              "required": true
-            }]
-          }]
-      });      
       try {
+        interaction.showModal({
+          "title": "Варіант відповіді",
+          "custom_id": `${interaction.meta[0]}:${interaction.meta[1]}`,
+          "components": [{
+              "type": 1,
+              "components": [{
+                "type": 4,
+                "custom_id": "text",
+                "label": "Напишіть варіант відповіді",
+                "style": 2,
+                "min_length": 1,
+                "max_length": 80,
+                "required": true
+              }]
+            }]
+        });      
         await interaction.reply({content:"Введіть варіант відповіді", ephemeral: true})
       } catch (error) {
         
@@ -394,23 +394,23 @@ module.exports.modal = async function (interaction) {
       embeds[0].footer.text = `Обмеження ${(!time && !users ) ? "вимкнуто" : ":"}`
       if (time) { 
         time *= 1000
-        let timeString = `` 
+        let timeString = `\n -` 
         const date = time.msToDate()
 
         for (const key in date) {
-          if(date[ key ]) {
+          if(date[key]) {
             switch (key) {
-              case 'y' : timeString += date[ key ].declension({one: 'рік',     few: 'роки',    many: 'років' }); break;
-              case 'd' : timeString += date[ key ].declension({one: 'день',    few: 'дня',     many: 'днів'  }); break;
-              case 'h' : timeString += date[ key ].declension({one: 'година',  few: 'години',  many: 'годин' }); break;
-              case 'm' : timeString += date[ key ].declension({one: 'хвилина', few: 'хвилини', many: 'хвилин'}); break;
-              case 's' : timeString += date[ key ].declension({one: 'секунда', few: 'секунди', many: 'секунд'}); break;
+              case 'y' : timeString += ' ' + date[ key ].declension({one: 'рік',     few: 'роки',    many: 'років' }); break;
+              case 'd' : timeString += ' ' + date[ key ].declension({one: 'день',    few: 'дня',     many: 'днів'  }); break;
+              case 'h' : timeString += ' ' + date[ key ].declension({one: 'година',  few: 'години',  many: 'годин' }); break;
+              case 'm' : timeString += ' ' + date[ key ].declension({one: 'хвилина', few: 'хвилини', many: 'хвилин'}); break;
+              case 's' : timeString += ' ' + date[ key ].declension({one: 'секунда', few: 'секунди', many: 'секунд'}); break;
             }
           }
         }
         embeds[0].footer.text += timeString
       };
-      if (users) embeds[0].footer.text += users.declension();
+      if (users) embeds[0].footer.text += '\n - ' + users.declension();
       const components = []
 
       const l = params.length / 5
