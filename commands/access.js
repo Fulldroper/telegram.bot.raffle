@@ -20,9 +20,9 @@ module.exports.info = {
 
 module.exports.run = async function(interaction) {
   const id = `${this.user.username}:${interaction.guildId}:allow:${interaction.commandName || interaction.meta[0]}`
-  const allowed = await this.db.get(id)
-  const command = interaction.options.get("command")
-  const user = interaction.options.get("user")
+  const allowed = await this.db.get(id) || []
+  const command = interaction.options.get("command").value
+  const user = interaction.options.get("user").value
   const id2 = `${this.user.username}:${interaction.guildId}:allow:${command}`
 
   if (interaction.member.permissions.serialize().Administrator || allowed.includes(interaction.member.id)) {
