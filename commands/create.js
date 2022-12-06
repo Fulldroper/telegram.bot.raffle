@@ -108,7 +108,10 @@ module.exports.info = {
 }
 
 module.exports.run = async function (interaction) {
-  const ref = await this.db.get(`${this.user.username}:${interaction.guildId}:settings`)
+  const id = `${this.user.username}:${interaction.guildId}:allow:${interaction.commandName || interaction.meta[0]}`
+  const allowed = await this.db.get(id) || []
+  if (interaction.member.permissions.serialize().Administrator || allowed.includes(interaction.member.id)) {
+    const ref = await this.db.get(`${this.user.username}:${interaction.guildId}:settings`)
     if (ref?.channel) {
       if (interaction.channelId === ref.channel) {  
         const user = interaction.member.user
@@ -192,6 +195,7 @@ module.exports.run = async function (interaction) {
         this.db.set(`${this.user.username}:${interaction.guildId}:vote:${message.id}:embed`, embeds)
       } else interaction.reply({ content: `❌ Цей канал не є каналом для публікацій, спробуйте в каналі <#${ref.channel}>.`, ephemeral: true }).catch(e => console.error(e));
     } else interaction.reply({ content: `❌ Канал для публікацій за замовчуванням не встановлено. Введіть команду </${"channel"}:${this.cmds["channel"].id}> для цього`, ephemeral: true }).catch(e => console.error(e));
+  } else interaction.reply({ content: `❌ У вас недостатньо прав для виконання команди`, ephemeral: true }).catch(e => console.error(e));
 }
 
 module.exports.component = async function (interaction) {
