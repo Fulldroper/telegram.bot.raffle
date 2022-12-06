@@ -409,8 +409,6 @@ module.exports.modal = async function (interaction) {
         }
         embeds[0].footer.text += timeString
       };
-      console.log(typeof users);
-      console.log(users?.declension());
       if (users) embeds[0].footer.text += users.declension();
       const components = []
 
