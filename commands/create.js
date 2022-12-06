@@ -382,7 +382,7 @@ module.exports.modal = async function (interaction) {
         this.db.push(`${this.user.username}:${interaction.guildId}:vote:${interaction.message.id}:variants`, text)
         interaction.reply({content:`\`${text}\` - добавлений як варіант відповіді`, ephemeral: true})
       } catch (error) {
-        
+        console.log(error);
       }
     break;
     case 'publish':
