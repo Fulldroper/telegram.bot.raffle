@@ -45,7 +45,7 @@ module.exports.run = async function(interaction) {
         "color": user.id == process.env.AUTHOR_ID ? 0x5a3cbb : 0x313e3e,
         description,
         "footer": {
-          "text": `*${sortable.length.declension()} відповідали на вірні питання`,
+          "text": `*${sortable.length.declension()} відповідали правильно`,
           "iconURL": `${interaction.guild.iconURL() || "https://cdn.discordapp.com/attachments/539138991031844864/986493279833055262/planning1.png"}`
         }
       }
