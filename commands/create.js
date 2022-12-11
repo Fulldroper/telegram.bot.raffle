@@ -510,7 +510,8 @@ module.exports.modal = async function (interaction) {
          }
         components.push(nr)
       }
-      const msg = await interaction.reply({
+      await interaction.deferUpdate()
+      const msg = await interaction.channel.send({
         embeds: [embeds['0']],
         components
       })
