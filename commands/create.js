@@ -12,7 +12,6 @@ async function close({guildId, voteId, channelId, messageId}) {
     // console.log(m_);
     // const msg = m_.entries().next().value[1]
     const msg = await ch.messages.fetch(messageId)
-    console.log(msg);
     // list variants
     const variants = await this.db.get(`${this.user.username}:${guildId}:vote:${voteId}:variants`)
     // list of votes
@@ -53,6 +52,7 @@ async function close({guildId, voteId, channelId, messageId}) {
     await this.db.clear(`${this.user.username}:${guildId}:vote:${voteId}:votes`)
     await this.db.clear(`${this.user.username}:${guildId}:vote:${voteId}:right`)
     await this.db.clear(`${this.user.username}:${guildId}:vote:${voteId}:embed`)
+    await this.db.clear(`${this.user.username}:${guildId}:vote:${voteId}:userLimit`)
     // render res
     const canvas = await render(result)
     // edit msg
@@ -447,7 +447,11 @@ module.exports.modal = async function (interaction) {
         const text = interaction.fields.getTextInputValue("text")
         const variants = await this.db.get(`${this.user.username}:${interaction.guildId}:vote:${interaction.message.id}:variants`)
         if (variants?.includes(text)) {
-          interaction.reply({content:`\`${text}\` - варіант відповіді вже існує`, ephemeral: true})
+          try {
+            interaction.deferUpdate()
+          } catch (error) {
+            
+          }
           return
         }
         this.db.push(`${this.user.username}:${interaction.guildId}:vote:${interaction.message.id}:variants`, text)
