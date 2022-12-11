@@ -2,14 +2,15 @@ const EX = 3600000
 
 async function close({guildId, voteId, channelId, messageId}) {
   try {
-    console.log({guildId, voteId, channelId, messageId});
     // const msg = await this.guilds.cache.get(guildId).channels.cache.get(channelId).messages.fetch(messageId)
     const ch = await this.channels.fetch(channelId)
+    console.log(ch);
     const m_ = await ch.messages.fetch({
       limit: 1, // Amount of messages to be fetched in the channel
       before: messageId,
       after: messageId,
     })
+    console.log(m_);
     const msg = m_.entries().next().value[1]
     // list variants
     const variants = await this.db.get(`${this.user.username}:${guildId}:vote:${voteId}:variants`)
@@ -423,7 +424,7 @@ module.exports.component = async function (interaction) {
       if (params.users) {
         let usrs = 1
         votes.forEach(e => usrs+= e.length)
-        
+
         usrs >= params.users && close.call(this, {
           guildId: interaction.guildId, 
           voteId: interaction.meta[2], 
