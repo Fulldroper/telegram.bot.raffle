@@ -272,6 +272,7 @@ module.exports.component = async function (interaction) {
       }
       break;
     case 'accept_2':
+      console.log("modal", interaction.meta[2]);
       await interaction.showModal({
         "title": "Введіть налаштування",
         "custom_id": `${interaction.meta[0]}:publish:${interaction.meta[2]}`,
@@ -397,7 +398,7 @@ module.exports.component = async function (interaction) {
           }
         }
       }
-
+      
       if (right) {
         if (right[0] === variants_[interaction.meta[3]]) {
           const stats = (await this.db.get(`${this.user.username}:${interaction.guildId}:stats`)) || {}
@@ -409,7 +410,7 @@ module.exports.component = async function (interaction) {
           await this.db.set(`${this.user.username}:${interaction.guildId}:stats`, stats)
         }
       }
-            
+      
       votes[Number(interaction.meta[3])].push(interaction.user.id)
       
       await this.db.setArray(`${this.user.username}:${interaction.guildId}:vote:${interaction.meta[2]}:votes`, votes)
@@ -418,7 +419,9 @@ module.exports.component = async function (interaction) {
       if (params.users) {
         let usrs = 1
         votes.forEach(e => usrs+= e.length)
-          
+        
+        console.log("vote", interaction.meta[2]);
+        
         usrs >= params.users && close.call(this, {
           guildId: interaction.guildId, 
           voteId: interaction.meta[2], 
@@ -426,11 +429,11 @@ module.exports.component = async function (interaction) {
           messageId: interaction.message.id
         })
       }
-    break;
-    default:
-      interaction.reply({content:"Невідома команда", ephemeral: true})  
-    break;
-  }
+      break;
+      default:
+        interaction.reply({content:"Невідома команда", ephemeral: true})  
+        break;
+      }
 }
 
 module.exports.modal = async function (interaction) {
