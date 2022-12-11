@@ -361,7 +361,7 @@ module.exports.component = async function (interaction) {
         return
       }
       try {
-        interaction.showModal({
+        await interaction.showModal({
           "title": "Варіант відповіді",
           "custom_id": `${interaction.meta[0]}:${interaction.meta[1]}`,
           "components": [{
@@ -376,8 +376,7 @@ module.exports.component = async function (interaction) {
                 "required": true
               }]
             }]
-        });      
-        await interaction.reply({content:"Введіть варіант відповіді", ephemeral: true})
+        });
       } catch (error) {
         
       }
@@ -419,7 +418,7 @@ module.exports.component = async function (interaction) {
       if (params.users) {
         let usrs = 1
         votes.forEach(e => usrs+= e.length)
-        
+
         console.log("vote", interaction.meta[2]);
         
         usrs >= params.users && close.call(this, {
