@@ -2,13 +2,15 @@ const EX = 3600000
 
 async function close({guildId, voteId, channelId, messageId}) {
   try {
+    console.log({guildId, voteId, channelId, messageId});
     // const msg = await this.guilds.cache.get(guildId).channels.cache.get(channelId).messages.fetch(messageId)
     const ch = await this.channels.fetch(channelId)
-    const msg = (await ch.messages.fetch({
+    const m_ = await ch.messages.fetch({
       limit: 1, // Amount of messages to be fetched in the channel
       before: messageId,
       after: messageId,
-    })).entries().next().value[1]
+    })
+    const msg = m_.entries().next().value[1]
     // list variants
     const variants = await this.db.get(`${this.user.username}:${guildId}:vote:${voteId}:variants`)
     // list of votes
@@ -272,7 +274,6 @@ module.exports.component = async function (interaction) {
       }
       break;
     case 'accept_2':
-      console.log("modal", interaction.meta[2]);
       await interaction.showModal({
         "title": "Введіть налаштування",
         "custom_id": `${interaction.meta[0]}:publish:${interaction.meta[2]}`,
@@ -422,8 +423,6 @@ module.exports.component = async function (interaction) {
       if (params.users) {
         let usrs = 1
         votes.forEach(e => usrs+= e.length)
-
-        console.log("vote", interaction.meta[2]);
         
         usrs >= params.users && close.call(this, {
           guildId: interaction.guildId, 
