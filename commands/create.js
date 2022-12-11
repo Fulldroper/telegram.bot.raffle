@@ -413,7 +413,7 @@ module.exports.component = async function (interaction) {
       votes[Number(interaction.meta[3])].push(interaction.user.id)
       
       await this.db.setArray(`${this.user.username}:${interaction.guildId}:vote:${interaction.meta[2]}:votes`, votes)
-      await interaction.reply({content: `Ви успішно зробили свій вибір`, ephemeral: true})
+      await interaction.deferUpdate()
       
       if (params.users) {
         let usrs = 1
