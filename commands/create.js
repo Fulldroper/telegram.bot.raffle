@@ -260,10 +260,10 @@ module.exports.component = async function (interaction) {
               "components": [
                 {
                   "type": 2,
-                  "label": "Додати варіант відповіді",
-                  "emoji": "📝",
+                  "label": "Вибрати вірний варіант",
+                  "emoji": "🏷️",
                   "style": 1,
-                  "custom_id": `${interaction.meta[0]}:add:${interaction.message.id}`
+                  "custom_id": `${interaction.meta[0]}:list:right:${interaction.message.id}`
                 }
               ]
             }
@@ -359,9 +359,7 @@ module.exports.component = async function (interaction) {
     break;
     case 'add': 
       // add var
-      let mid = interaction.message.id
-      if (interaction.meta[2]) mid = interaction.meta[2];
-      if ((await this.db.get(`${this.user.username}:${interaction.guildId}:vote:${mid}:variants`))?.length >= 15) {
+      if ((await this.db.get(`${this.user.username}:${interaction.guildId}:vote:${interaction.message.id}:variants`))?.length >= 15) {
         interaction.reply({content: 'Вже максимальна кількість варіантів', ephemeral: true})
         return
       }
