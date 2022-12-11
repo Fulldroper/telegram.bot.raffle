@@ -345,7 +345,7 @@ module.exports.component = async function (interaction) {
     break;
     case 'right':
       this.db.set(`${this.user.username}:${interaction.guildId}:vote:${interaction.meta[2]}:right`, [interaction.values[0]])
-      interaction.reply({content: `\`${interaction.values[0]}\` - варіант був встановленний як вірний`, ephemeral: true})
+      interaction.deferUpdate()
     break;
     case 'remove':
       this.db.filter(
@@ -450,7 +450,7 @@ module.exports.modal = async function (interaction) {
           return
         }
         this.db.push(`${this.user.username}:${interaction.guildId}:vote:${interaction.message.id}:variants`, text)
-        interaction.reply({content:`\`${text}\` - добавлений як варіант відповіді`, ephemeral: true})
+        interaction.deferUpdate()
       } catch (error) {
         console.log(error);
       }
