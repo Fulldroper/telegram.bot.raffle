@@ -4,14 +4,15 @@ async function close({guildId, voteId, channelId, messageId}) {
   try {
     // const msg = await this.guilds.cache.get(guildId).channels.cache.get(channelId).messages.fetch(messageId)
     const ch = await this.channels.fetch(channelId)
-    console.log(ch);
-    const m_ = await ch.messages.fetch({
-      limit: 1, // Amount of messages to be fetched in the channel
-      before: messageId,
-      after: messageId,
-    })
-    console.log(m_);
-    const msg = m_.entries().next().value[1]
+    // const m_ = await ch.messages.fetch({
+    //   limit: 1, // Amount of messages to be fetched in the channel
+    //   before: messageId,
+    //   after: messageId,
+    // })
+    // console.log(m_);
+    // const msg = m_.entries().next().value[1]
+    const msg = await ch.messages.fetch(messageId)
+    console.log(msg);
     // list variants
     const variants = await this.db.get(`${this.user.username}:${guildId}:vote:${voteId}:variants`)
     // list of votes
