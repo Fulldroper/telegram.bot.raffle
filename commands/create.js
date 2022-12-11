@@ -202,14 +202,84 @@ module.exports.component = async function (interaction) {
   switch (interaction.meta[1]) {
     case 'accept':
       const variants__ = await this.db.get(`${this.user.username}:${interaction.guildId}:vote:${interaction.message.id}:variants`)
+      const right_ = await this.db.get(`${this.user.username}:${interaction.guildId}:vote:${interaction.message.id}:right`)
       if (variants__ === null || variants__.length <= 0) {
         interaction.reply({content: 'Не вказані варіантів відповіді', ephemeral: true})
         return
       }
       
+      if (right_) {
+        await interaction.showModal({
+          "title": "Введіть налаштування",
+          "custom_id": `${interaction.meta[0]}:publish:${interaction.message.id}`,
+          "components": [
+            {
+              "type": 1,
+              "components": [{
+                "type": 4,
+                "custom_id": "time",
+                "label": "Секунд на відповідь (Не обов'язково)",
+                "style": 1,
+                "min_length": 1,
+                "max_length": 10,
+                "placeholder": `${EX/1000}`,
+                "required": false
+              }]
+            }, {
+              "type": 1,
+              "components": [{
+                "type": 4,
+                "custom_id": "users",
+                "label": "Ліміт на людей (Не обов'язково)",
+                "style": 1,
+                "min_length": 1,
+                "max_length": 10,
+                "required": false
+              }]
+            }
+          ]
+        });
+      } else {
+        interaction.reply({
+          content: 'Не вказади вірний варіантів відповіді. Пробовжити?',
+          components: [
+            {
+              "type": 1,
+              "components": [
+                {
+                  "type": 2,
+                  "label": "Опублікувати",
+                  "emoji": "✅",
+                  "style": 3,
+                  "custom_id": `${interaction.meta[0]}:accept_2:${interaction.message.id}`
+                }
+              ]
+            },
+            {
+              "type": 1,
+              "components": [
+                {
+                  "type": 2,
+                  "label": "Додати варіант відповіді",
+                  "emoji": "📝",
+                  "style": 1,
+                  "custom_id": `${interaction.meta[0]}:add:${interaction.message.id}`
+                }
+              ]
+            }
+          ], ephemeral: true})
+      }
+      
+      try {
+        await interaction.reply({content:"Введіть варіант відповіді", ephemeral: true})
+      } catch (error) {
+        
+      }
+      break;
+    case 'accept_2':
       await interaction.showModal({
         "title": "Введіть налаштування",
-        "custom_id": `${interaction.meta[0]}:publish:${interaction.message.id}`,
+        "custom_id": `${interaction.meta[0]}:publish:${interaction.meta[2]}`,
         "components": [
           {
             "type": 1,
@@ -237,12 +307,6 @@ module.exports.component = async function (interaction) {
           }
         ]
       });
-      
-      try {
-        await interaction.reply({content:"Введіть варіант відповіді", ephemeral: true})
-      } catch (error) {
-        
-      }
     break;
     case 'list':
       const variants = await this.db.get(`${this.user.username}:${interaction.guildId}:vote:${interaction.message.id}:variants`)
@@ -295,7 +359,9 @@ module.exports.component = async function (interaction) {
     break;
     case 'add': 
       // add var
-      if ((await this.db.get(`${this.user.username}:${interaction.guildId}:vote:${interaction.message.id}:variants`))?.length >= 15) {
+      let mid = interaction.message.id
+      if (interaction.meta[2]) mid = interaction.meta[2];
+      if ((await this.db.get(`${this.user.username}:${interaction.guildId}:vote:${mid}:variants`))?.length >= 15) {
         interaction.reply({content: 'Вже максимальна кількість варіантів', ephemeral: true})
         return
       }
