@@ -241,7 +241,7 @@ module.exports.component = async function (interaction) {
         });
       } else {
         interaction.reply({
-          content: 'Не вказади вірний варіантів відповіді. Пробовжити?',
+          content: 'Ви не вказади вірний варіантів відповіді. Пробовжити?',
           components: [
             {
               "type": 1,
@@ -252,12 +252,7 @@ module.exports.component = async function (interaction) {
                   "emoji": "✅",
                   "style": 3,
                   "custom_id": `${interaction.meta[0]}:accept_2:${interaction.message.id}`
-                }
-              ]
-            },
-            {
-              "type": 1,
-              "components": [
+                },
                 {
                   "type": 2,
                   "label": "Вибрати вірний варіант",
@@ -309,7 +304,8 @@ module.exports.component = async function (interaction) {
       });
     break;
     case 'list':
-      const variants = await this.db.get(`${this.user.username}:${interaction.guildId}:vote:${interaction.message.id}:variants`)
+      const mid = interaction.meta[3] || interaction.message.id
+      const variants = await this.db.get(`${this.user.username}:${interaction.guildId}:vote:${mid}:variants`)
       if (variants === null || variants.length <= 0) {
         interaction.reply({content: 'Немає варіантів відповіді', ephemeral: true})
         return
@@ -334,7 +330,7 @@ module.exports.component = async function (interaction) {
             "components": [
               {
                 "type": 3,
-                "custom_id": `${interaction.meta[0]}:${interaction.meta[2]}:${interaction.message.id}`,
+                "custom_id": `${interaction.meta[0]}:${interaction.meta[2]}:${mid}`,
                 options,
                 "placeholder": "Виберіть варіант відповіді",
                 "min_values": 1,
