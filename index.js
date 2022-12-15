@@ -3,26 +3,15 @@
   // env configuration
   process.env.Production || await require('dotenv').config({ debug: false })
 
-  // import configs
-  const { config, description } = await require("./package.json")
-
   // import libs
   const { readdirSync } = await require('fs')
-  const { REST, Routes, Client, GatewayIntentBits } = await require('discord.js');
-
-  // init discord bot && rest obj
-  const bot = new Client({ intents: [
-    GatewayIntentBits.Guilds,
-		GatewayIntentBits.GuildMessages,
-		GatewayIntentBits.MessageContent,
-		GatewayIntentBits.GuildMembers,
-    GatewayIntentBits.GuildIntegrations,
-    GatewayIntentBits.GuildMessageReactions
-  ] });
-  const rest = new REST({ version: '10' }).setToken( process.env.TOKEN );
-
-  // import configs to discord bot object
+  const bot = new (await require('node-telegram-bot-api'))(process.env.TOKEN , {polling: true});
+  const axios = require("axios")
+  
+  // import configs
+  const { config, name, description } = await require("./package.json")
   bot.config = config
+  bot.name = name
 
   // function of importing modules from folder
   const importer = async (path, blocked_char = "!") => {
@@ -61,102 +50,80 @@
   // import addons
   bot.addons = await importer(config.path.addons)
 
+  // import commands
+  bot.commands = await importer(config.path.commands)
+
+  // import callbacks
+  bot.callbacks = await importer(config.path.callbacks)
+
+  // import events
+  const events = await importer(config.path.events)
+  
   // init custom prototypes
   bot.addons['moded_prototypes']()
+
+  // init custom prototypes
+  bot.newTicket = bot.addons['ticket']
 
   // init db
   bot.db = new bot.addons["redis_db"](process.env.REDIS_URL)
 
-  // init error cath method and add to discord bot object
-  try {
-    // validate env
-    if (!process.env.ERROR_WEBHOOK_URL || !process.env.CLIENT_ID) throw "wrong env";
-    
-    // init addon
-    bot.catch_err = bot.addons['errorCallback']({
-      webhook_url: process.env.ERROR_WEBHOOK_URL,
-      username: process.env.CLIENT_ID,
+  // register commands
+  const commandsContainer = []
+
+  for (const command in bot.commands) {
+    commandsContainer.push(bot.commands[command].info)
+  }
+
+  bot.setMyCommands([]) // clear commands for all
+  // set only for admins
+  config.admins.forEach(chat_id => {
+    axios.post(`https://api.telegram.org/bot${process.env.TOKEN}/setMyCommands`, {
+      commands: commandsContainer,
+      scope: { type: "chat", chat_id }
     })
+  })
 
-  } catch (error) {
-    console.error("[Error catch module can`t be imported]:", error);
-  }
+  delete commandsContainer
 
-  // import and register commands
-  bot.cmds = await importer(config.path.commands)
-  bot.cmdKeyLib = {}
-  const exit = await rest.get(Routes.applicationCommands(process.env.CLIENT_ID))
-  
-  const now = Object.keys(bot.cmds)
-  const old = exit.filter(c => (!now.includes(c.name)))
+  // connect to db
+  await bot.db.connect()
+ 
+  // reg state container
+  bot.state = {}
 
-  for (const item of old) {
-    await rest.delete(`${Routes.applicationCommands(process.env.CLIENT_ID)}/${item.id}`)
-  }
-
-  if (bot.cmds) {
-    for (const command in bot.cmds) {
-      const { id } = await rest.post(Routes.applicationCommands(process.env.CLIENT_ID), { body: bot.cmds[command].info })
-      bot.cmds[command].id = id
-      bot.cmdKeyLib[command] = command
-      bot.cmdKeyLib[id] = command
-    }
-  }
-
-  const _cmds = {}
-  const _arr = (await rest.get(Routes.applicationCommands(process.env.CLIENT_ID)))
-
-  for (const x of _arr) {
-    _cmds[x.name] = x.id
-  }
-  
-  // let _description = description
-  // const ms = description.matchAll(/\$[a-z]{1,32}/gm)
-  
-  // for (const m of ms) {
-  //   const c = m[0].slice(1)
-  //   if (_cmds[c]) {
-  //     _description = _description.replaceAll(m[0],`</${c}:${_cmds[c]}>`)
-  //   }
-  // }
-
-  // _description = _description.slice(0,400 - 3)
-  // _description += "..."
-
-  // bot.addons['descriptionManage']({testerToken: process.env.TESTER_TOKEN, appID:process.env.CLIENT_ID, description:_description})
-  // .catch(e => console.log(e))
-
-  // import and register events
-  const events = await importer(config.path.events)
+  // init events
   if (events) {
     for (const key in events) {
       bot.on(key, events[key])
     }
   }
 
-  // run bot
-  bot.login( process.env.TOKEN )
 })()
-// @@@
-// - create голосування з параметрами: варіанти відповіді (з позначенням правильної), текст-питання, фото
-// (встановлення часу на голосування, по дефолту можна поставити хвилин 10)
-// - top 10 переможців
-// - reset top
-// const cfg = {
-//   timingLimit: 1000, //ms
-//   userLimit: 0, // if 0 unlimit
-//   params : [
-//     { value: 'Answer021100000000000000000000000000000...', isCorrect: true },
-//     { value: 'Answer 21sssssssssssssssssssssssssssssssssssss2', isCorrect: false },
-//     { value: 'Answer 123'},
-//   ],
-//   users: [
-//     ['snowFlake0','snowFlake01','snowFlake02','snowFlake02','snowFlake02','snowFlake02'],
-//     [],
-//     ['snowFlake2'],
-//   ]
-// }
 
-// const render = await require("./render")
+/*
+==================================
+-- ~  ~ ~ [ DB SCHEME ] ~ ~ ~ ~ --
+==================================
 
-// const canvas = await render(cfg)
+bot_name:settings {
+  condition
+  ref_count
+  tiket_cost
+}
+
+bot_name:channels [
+  chat_id, ...
+]
+
+bot_name:events {
+  event_id: end_date
+}
+
+bot_name:user_id:tikets [
+  tiket_id, ...
+]
+
+bot_name:user_id:refs = 0
+
+*/

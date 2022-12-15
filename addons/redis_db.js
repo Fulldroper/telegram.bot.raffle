@@ -9,7 +9,7 @@ module.exports = class {
     this.isConnected = false
     
     this.obj.on("connect", () => console.log('[redis]: connected'))
-    this.obj.on("ready", () => console.log('[redis]: ready'))
+    this.obj.on("ready", () => {console.log('[redis]: ready')})
     this.obj.on("end", () => console.log('[redis]: connection closed'))
     this.obj.on("error", e => console.log('[redis-error]: ', e))
     this.obj.on("reconnecting", () => console.log('[redis]: reconnecting'))
@@ -42,6 +42,12 @@ module.exports = class {
   }
   async clear(key){
     this.obj.del(key)
+  }
+  async inc(key, num = 1) {
+    await this.obj.set(key, (Number(await this.obj.get(key)) || 0) + num )
+  }
+  async keys(patern) {
+    return await this.obj.keys(patern)
   }
   connect() {
     if (this.isConnected) return;
