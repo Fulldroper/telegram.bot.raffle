@@ -33,17 +33,17 @@ module.exports.setDate = async function (msg) {
 module.exports.setDescription = async function (msg) {
   const e = {};
   e[new Date().getTime()] = this.state[msg.chat.id].storage.date;
-  this.db.push(`${this.name}:events`, e, this.state[msg.chat.id].storage.date);
+  this.db.push(`${this.name}:events`, e, this.state[msg.chat.id].storage.date - new Date().getTime());
 
   //  send all
   const users = (await this.db.keys(`*`))
     .filter(e => new RegExp(`^${this.name}:[0-9]{6,50}\:ref\_counter$`).test(e))
     .map(e => Number(e.split(":")[1]))
 
-  const text = `<b>Новая публкация</b>${msg.text}`
+  const text = `<b>Новый розыгрыш</b>\n${msg.text}`
 
   for (const user of users) {
-    this.copyMessage(user, msg.chat.id, msg.message_id);
+    this.sendMessage(user, text,  { parse_mode: "HTML" });
     await (2500).sleep()
   }
 
