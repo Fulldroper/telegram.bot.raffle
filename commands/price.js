@@ -6,7 +6,7 @@ module.exports.info = {
 };
 
 module.exports.run = async function (msg) {
-  this.sendMessage(
+  this.telegram.sendMessage(
     msg.chat.id,
     "Укажите сумму за 1 билет (число):", { parse_mode: "HTML" }
   );
@@ -24,7 +24,7 @@ module.exports.setPrice = async function (msg) {
     const settings = await this.db.get(`${this.name}:settings`) || {}
     settings.tiket_cost = Number(msg.text)
     await this.db.set(`${this.name}:settings`,settings)
-    this.sendMessage(msg.chat.id, `Cумма за 1 билет = ${Number(msg.text)}`, { parse_mode: "HTML" });
+    this.telegram.sendMessage(msg.chat.id, `Cумма за 1 билет = ${Number(msg.text)}`, { parse_mode: "HTML" });
     delete this.state[msg.chat.id];
-  } else this.sendMessage(msg.chat.id, "⚠️<b>Это неверный формат.</b> Попробуйте ещё раз:", { parse_mode: "HTML" });
+  } else this.telegram.sendMessage(msg.chat.id, "⚠️<b>Это неверный формат.</b> Попробуйте ещё раз:", { parse_mode: "HTML" });
 };

@@ -22,5 +22,5 @@ module.exports.run = async function (msg) {
   writeFileSync('tmp.csv', file)
   //`data:text/csv;base64,${Buffer.from(file).toString('base64')}`
 
-  this.sendDocument(msg.chat.id, './tmp.csv')
+  this.this.telegram.sendDocument(msg.chat.id, './tmp.csv')
 };

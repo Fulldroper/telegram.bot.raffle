@@ -6,7 +6,7 @@ module.exports.info = {
 };
 
 module.exports.run = async function (msg) {
-  this.sendMessage(
+  this.telegram.sendMessage(
     msg.chat.id,
     "<b>Напишите публикацию</b>:", { parse_mode: "HTML" }
   );
@@ -26,11 +26,11 @@ module.exports.publishAll = async function (msg) {
     .map(e => Number(e.split(":")[1]))
 
   for (const user of users) {
-    this.copyMessage(user, msg.chat.id, msg.message_id);    
+    this.this.telegram.copyMessage(user, msg.chat.id, msg.message_id);    
     await (2500).sleep()
   }
 
   // clear state
   delete this.state[msg.chat.id];
-  this.sendMessage(msg.chat.id, "✅Опудликовано!");
+  this.telegram.sendMessage(msg.chat.id, "✅Опудликовано!");
 };

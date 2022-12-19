@@ -6,7 +6,7 @@ module.exports.info = {
 };
 
 module.exports.run = async function (msg) {
-  this.sendMessage(
+  this.telegram.sendMessage(
     msg.chat.id,
     "Укажите условия:", { parse_mode: "HTML" }
   );
@@ -23,5 +23,5 @@ module.exports.setCondition = async function (msg) {
   const settings = await this.db.set(`${this.name}:settings`) || {}
   settings.condition = msg.text
   await this.db.set(`${this.name}:settings`,settings)
-  this.sendMessage(msg.chat.id, `Условия успешно изменены`, { parse_mode: "HTML" });
+  this.telegram.sendMessage(msg.chat.id, `Условия успешно изменены`, { parse_mode: "HTML" });
 };

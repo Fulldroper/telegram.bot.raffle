@@ -7,5 +7,5 @@ module.exports.info = {
 
 module.exports.run = async function (msg) {
   this.db.clear(`${this.name}:events`);
-  this.sendMessage(msg.chat.id, "✅Розыгрыш остановлен!");
+  this.telegram.sendMessage(msg.chat.id, "✅Розыгрыш остановлен!");
 };

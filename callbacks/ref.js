@@ -4,7 +4,7 @@ module.exports.run = async function (call) {
   };
   const refs = (await this.db.get(`${this.name}:${call.from.id}:refs`))?.length || 0;
   const refs_counter = (await this.db.get(`${this.name}:${call.from.id}:refs_counter`)) || 0;
-  this.sendMessage(
+  this.telegram.sendMessage(
     call.from.id,
     `❗️Вы сможете заработать билеты не только покупая их, но и приглашая новых пользователей в бота. За каждого приведённого пользователя Вы сможете получить ${settings.ref_count} билет\n
   👇Приглашайте пользователей только по этой ссылке 

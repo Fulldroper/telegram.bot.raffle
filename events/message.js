@@ -20,7 +20,7 @@ module.exports = async function (msg) {
         this.commands[cmd[0].slice(1)].run.call(this, msg);
         return;
       } else {
-        this.sendMessage(msg.chat.id, "wrong type of chat");
+        this.telegram.sendMessage(msg.chat.id, "wrong type of chat");
         console.log(msg);
       }
     }
@@ -39,7 +39,7 @@ module.exports = async function (msg) {
 
     return;
   } catch (error) {
-    this.sendMessage(msg.chat.id, "error on running command");
+    this.telegram.sendMessage(msg.chat.id, "error on running command");
     console.log(error);
   }
 };

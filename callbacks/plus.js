@@ -6,7 +6,7 @@ module.exports.run = async function (call) {
   bs.inline_keyboard[0][1].text = n;
   bs.inline_keyboard[1][0].text = `💰Общая сумма: ${n * settings.tiket_cost}₽`;
 
-  this.editMessageReplyMarkup(bs, {
+  this.this.telegram.editMessageReplyMarkup(bs, {
     message_id: call.message.message_id,
     chat_id: call.message.chat.id,
   });

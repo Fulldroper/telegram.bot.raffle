@@ -15,7 +15,7 @@ module.exports.run = async function (call) {
       ],
     }),
   };
-  this.sendMessage(
+  this.telegram.sendMessage(
     call.message.chat.id,
     `Тут Вы можете купить дополнительные билеты для увеличения шансов на выигрыш!\n<b>1 билет </b>= ${settings.tiket_cost}₽\nВоспользуйтесь кнопками ниже, чтобы купить нужное кол-во билетов!\n❗️Кнопка посередине показывает кол-во билетов, которое Вы выбрали для покупки`,
     buttons

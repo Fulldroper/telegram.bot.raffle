@@ -1,7 +1,7 @@
 module.exports = async function (call) {
   try {
     // fast answer
-    this.answerCallbackQuery({ callback_query_id: call.id })
+    this.this.telegram.answerCallbackQuery({ callback_query_id: call.id })
 
     // if ignore
     if (call.data === "no-react") return;
@@ -18,7 +18,7 @@ module.exports = async function (call) {
 
     return;
   } catch (error) {
-    this.sendMessage(call.message.chat.id, "error on running command");
+    this.telegram.sendMessage(call.message.chat.id, "error on running command");
     console.log(error);
   }
 };

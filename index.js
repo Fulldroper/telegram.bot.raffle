@@ -5,7 +5,7 @@
 
   // import libs
   const { readdirSync } = await require('fs')
-  const bot = new (await require('node-telegram-bot-api'))(process.env.TOKEN , {polling: true});
+  const bot = new (await require('telegraf')).Telegraf(process.env.TOKEN , {polling: true});
   const axios = require("axios")
   
   // import configs
@@ -75,7 +75,8 @@
     commandsContainer.push(bot.commands[command].info)
   }
 
-  bot.setMyCommands([]) // clear commands for all
+  // bot.setMyCommands([]) // clear commands for all
+  axios.post(`https://api.telegram.org/bot${process.env.TOKEN}/setMyCommands`, {commands: [] })
   // set only for admins
   config.admins.forEach(chat_id => {
     axios.post(`https://api.telegram.org/bot${process.env.TOKEN}/setMyCommands`, {

@@ -14,7 +14,8 @@
       "addons": "./addons/"
     },
     "admins": [
-      390818781, 1021188889
+      390818781,
+      1021188889
     ]
   },
   "author": "full_droper <full_droper@pm.me>",
@@ -27,6 +28,7 @@
     "axios": "^0.27.2",
     "fs": "^0.0.1-security",
     "node-telegram-bot-api": "^0.60.0",
-    "redis": "^4.5.1"
+    "redis": "^4.5.1",
+    "telegraf": "^4.11.2"
   }
 }

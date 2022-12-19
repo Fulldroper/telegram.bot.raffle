@@ -4,7 +4,7 @@ module.exports.run = async function (call) {
   let text = `🎟 <b>Мои билеты</b>
   <b>У Вас:</b> ${tikets.length} билетов\n👇Ниже список ваших билетов:\n`;
   tikets.forEach((tiket) => (text += `${tiket}\n`));
-  this.sendMessage(call.from.id, text, {
+  this.telegram.sendMessage(call.from.id, text, {
     parse_mode: "HTML",
     reply_markup: JSON.stringify({
       inline_keyboard: [[{ text: "🔙Назад", callback_data: "menu" }]],

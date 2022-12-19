@@ -6,7 +6,7 @@ module.exports.info = {
 };
 
 module.exports.run = async function (msg) {
-  this.sendMessage(
+  this.telegram.sendMessage(
     msg.chat.id,
     "<b>Отправте сообщение от канала</b>:", { parse_mode: "HTML" }
   );
@@ -24,11 +24,11 @@ module.exports.opSet = async function (msg) {
     const exist_ch = await this.db.get(`${this.name}:op`) || [] 
     for (const ch of exist_ch) {
       if (msg.forward_from_chat.id === ch.id) {
-        this.sendMessage(msg.chat.id, `Канал уже зарегестрирован`);
+        this.telegram.sendMessage(msg.chat.id, `Канал уже зарегестрирован`);
         return
       } 
     }
-    this.sendMessage(msg.chat.id, `Канал ${msg.forward_from_chat.title} добавлен, Введите линк на группу`);
+    this.telegram.sendMessage(msg.chat.id, `Канал ${msg.forward_from_chat.title} добавлен, Введите линк на группу`);
     this.state[msg.chat.id] = {
       name: "opUrlSet",
       command: "addop",
@@ -36,7 +36,7 @@ module.exports.opSet = async function (msg) {
       storage: msg.forward_from_chat,
     };
   } catch (error) {
-    this.sendMessage(msg.chat.id, `Канал не найден попробуйте снова`);
+    this.telegram.sendMessage(msg.chat.id, `Канал не найден попробуйте снова`);
   }
 };
 
@@ -46,10 +46,10 @@ module.exports.opUrlSet = async function (msg) {
     this.db.push(`${this.name}:op`, this.state[msg.chat.id].storage)
 
     // clear state
-    this.sendMessage(msg.chat.id, `Канал ${this.state[msg.chat.id].storage.title} с линком ${msg.text} зарегестрировано`);
+    this.telegram.sendMessage(msg.chat.id, `Канал ${this.state[msg.chat.id].storage.title} с линком ${msg.text} зарегестрировано`);
     delete this.state[msg.chat.id];
   } catch (error) {
     console.log(error);
-    this.sendMessage(msg.chat.id, `Линк не найден попробуйте снова`);
+    this.telegram.sendMessage(msg.chat.id, `Линк не найден попробуйте снова`);
   }
 };
