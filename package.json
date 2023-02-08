@@ -1,0 +1,36 @@
+{
+  "name": "fd6297test_bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node .",
+    "test": "nodemon --exec npm start"
+  },
+  "config": {
+    "path": {
+      "events": "./events/",
+      "commands": "./commands/",
+      "callbacks": "./callbacks/",
+      "addons": "./addons/"
+    },
+    "admins": [
+      390818781,
+      1021188889,
+      131601154
+    ]
+  },
+  "author": "full_droper <full_droper@pm.me>",
+  "license": "MIT",
+  "devDependencies": {
+    "dotenv": "^16.0.1",
+    "nodemon": "^2.0.16"
+  },
+  "dependencies": {
+    "axios": "^0.27.2",
+    "fastify": "^4.10.2",
+    "fs": "^0.0.1-security",
+    "node-telegram-bot-api": "^0.60.0",
+    "redis": "^4.5.1",
+    "uuid": "^9.0.0"
+  }
+}
