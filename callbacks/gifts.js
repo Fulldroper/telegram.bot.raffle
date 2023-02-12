@@ -1,8 +1,6 @@
 module.exports.run = async function (call) {
   const gifts = (await this.db.get(`${this.name}:gifts`)) || false;
 
-  
-
   if (!gifts || gifts.length < 1) {
     this.sendMessage(
       call.message.chat.id,

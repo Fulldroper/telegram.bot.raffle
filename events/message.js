@@ -1,5 +1,5 @@
 module.exports = async function (msg) {
-  console.log(msg);
+  process.env.DEBUG && console.log({time: new Date() ,cmd: msg.text, from: {name: msg.from.username, id: msg.from.id}});
   try {
     // fix media
     if (msg.media_group_id && msg.media_group_id === this.cache?.media_group) {

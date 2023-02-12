@@ -1,7 +1,8 @@
 module.exports = async function (call) {
+  process.env.DEBUG && console.log({time: new Date() ,callback: call.data, from: {name: call.from.username, id: call.from.id}});
   try {
     // fast answer
-    this.answerCallbackQuery({ callback_query_id: call.id });
+    this.answerCallbackQuery(call.id);
 
     // if ignore
     if (call.data === "no-react") return;
