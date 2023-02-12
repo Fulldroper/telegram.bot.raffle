@@ -8,7 +8,7 @@ module.exports.info = {
 module.exports.run = async function (msg) {
   const gifts = (await this.db.get(`${this.name}:gifts`)) || false;
 
-  if (!gifts) {
+  if (!gifts || gifts.length < 1) {
     this.sendMessage(
       msg.chat.id,
       "🤷‍♂️Пока что неизвестно какие призы будут...",

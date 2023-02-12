@@ -3,7 +3,7 @@ module.exports.run = async function (call) {
 
   
 
-  if (!gifts) {
+  if (!gifts || gifts.length < 1) {
     this.sendMessage(
       call.message.chat.id,
       "🤷‍♂️Пока что неизвестно какие призы будут..."

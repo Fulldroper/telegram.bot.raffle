@@ -11,7 +11,7 @@ module.exports.run = async function (msg) {
 
   const { writeFileSync } = require("node:fs");
 
-  writeFileSync("lang.json", JSON.stringify(lang));
+  writeFileSync("lang.json", JSON.stringify(lang, null, " "));
   //`data:text/csv;base64,${Buffer.from(file).toString('base64')}`
 
   this.sendDocument(msg.chat.id, "./lang.json");
