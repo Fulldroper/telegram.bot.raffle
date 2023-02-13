@@ -21,26 +21,28 @@ module.exports.run = async function (msg) {
     return;
   }
 
-  gifts.forEach(({fromId, mId}) => {
+  gifts.forEach(({fromId, mId, url = false}) => {
+    const inline_keyboard = [
+      [
+        {
+          text: "Изменить описание",
+          callback_data: `bridge:gifts:change:${mId}:${fromId}`,
+        },
+        {
+          text: "Удалить приз",
+          callback_data: `bridge:gifts:delete:${mId}:${fromId}`,
+        },
+      ],
+      [
+        { text: "✅Готово", callback_data: "clr-msg" },
+        { text: "Добавить приз", callback_data: `bridge:gifts:add` }
+      ],
+    ]
+    if (url) {
+      inline_keyboard.unshift([{ text: "🤝Спонсор", url, callback_data: "no-react" }])    
+    }
     this.copyMessage(msg.chat.id, fromId, mId, {
-      reply_markup: JSON.stringify({
-        inline_keyboard: [
-          [
-            {
-              text: "Изменить описание",
-              callback_data: `bridge:gifts:change:${mId}:${fromId}`,
-            },
-            {
-              text: "Удалить приз",
-              callback_data: `bridge:gifts:delete:${mId}:${fromId}`,
-            },
-          ],
-          [
-            { text: "✅Готово", callback_data: "clr-msg" },
-            { text: "Добавить приз", callback_data: `bridge:gifts:add` }
-          ],
-        ],
-      }),
+      reply_markup: JSON.stringify({inline_keyboard}),
     });
   });
 };
