@@ -1,10 +1,3 @@
----
-title: "Telegram Raffle Bot"
-description: "A Telegram bot for managing raffles with a referral system and ticket purchases linked to a banking API"
-publishDate: "08 Feb 2023"
-updatedDate: "13 Feb 2023"
-tags: ["Node.js", "Redis", "Telegram Bot", "Raffles"]
----
 The purpose of this project is to create a Telegram bot for managing raffles, incorporating a referral system and ticket purchases linked to a banking API.
 
 ### Project Benefits
